@@ -1,0 +1,63 @@
+// Copyright 2015 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+import 'dart:async';
+import 'dart:io' show File;
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/semantics.dart';
+
+import 'basic.dart';
+import 'binding.dart';
+import 'framework.dart';
+import 'localizations.dart';
+import 'media_query.dart';
+import 'ticker_provider.dart';
+
+export 'package:flutter/painting.dart' show
+  AssetImage,
+  ExactAssetImage,
+  FileImage,
+  FilterQuality,
+  ImageConfiguration,
+  ImageInfo,
+  ImageStream,
+  ImageProvider,
+  MemoryImage,
+  NetworkImage;
+
+/// Creates an [ImageConfiguration] based on the given [BuildContext] (and
+/// optionally size).
+///
+/// This is the object that must be passed to [BoxPainter.paint] and to
+/// [ImageProvider.resolve].
+///
+/// If this is not called from a build method, then it should be reinvoked
+/// whenever the dependencies change, e.g. by calling it from
+/// [State.didChangeDependencies], so that any changes in the environment are
+/// picked up (e.g. if the device pixel ratio changes).
+///
+/// See also:
+///
+///  * [ImageProvider], which has an example showing how this might be used.
+ImageConfiguration createLocalImageConfiguration(BuildContext context, { Size size }) {
+  return ImageConfiguration(
+    bundle: DefaultAssetBundle.of(context),
+    devicePixelRatio: MediaQuery.of(context, nullOk: true)?.devicePixelRatio ?? 1.0,
+    locale: Localizations.localeOf(context, nullOk: true),
+    textDirection: Directionality.of(context),
+    size: size,
+    platform: defaultTargetPlatform,
+  );
+}
+
+/// Prefetches an image into the image cache.
+///
+/// Returns a [Future] that will complete when the first image yielded by the
+/// [ImageProvider] is available or failed to load.
+///
+/// If the image is later used by an [Image] or [BoxDeco

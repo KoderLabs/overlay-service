@@ -1,0 +1,116 @@
+// Copyright 2016 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+import 'package:flutter/animation.dart';
+import 'package:flutter/foundation.dart';
+
+import 'basic.dart';
+import 'framework.dart';
+import 'ticker_provider.dart';
+import 'transitions.dart';
+
+// Internal representation of a child that, now or in the past, was set on the
+// AnimatedSwitcher.child field, but is now in the process of
+// transitioning. The internal representation includes fields that we don't want
+// to expose to the public API (like the controller).
+class _ChildEntry {
+  _ChildEntry({
+    @required this.controller,
+    @required this.animation,
+    @required this.transition,
+    @required this.widgetChild,
+  }) : assert(animation != null),
+       assert(transition != null),
+       assert(controller != null);
+
+  // The animation controller for the child's transition.
+  final AnimationController controller;
+
+  // The (curved) animation being used to drive the transition.
+  final Animation<double> animation;
+
+  // The currently built transition for this child.
+  Widget transition;
+
+  // The widget's child at the time this entry was created or updated.
+  // Used to rebuild the transition if necessary.
+  Widget widgetChild;
+
+  @override
+  String toString() => 'Entry#${shortHash(this)}($widgetChild)';
+}
+
+/// Signature for builders used to generate custom transitions for
+/// [AnimatedSwitcher].
+///
+/// The `child` should be transitioning in when the `animation` is running in
+/// the forward direction.
+///
+/// The function should return a widget which wraps the given `child`. It may
+/// also use the `animation` to inform its transition. It must not return null.
+typedef AnimatedSwitcherTransitionBuilder = Widget Function(Widget child, Animation<double> animation);
+
+/// Signature for builders used to generate custom layouts for
+/// [AnimatedSwitcher].
+///
+/// The builder should return a widget which contains the given children, laid
+/// out as desired. It must not return null. The builder should be able to
+/// handle an empty list of `previousChildren`, or a null `currentChild`.
+///
+/// The `previousChildren` list is an unmodifiable list, sorted with the oldest
+/// at the beginning and the newest at the end. It does not include the
+/// `currentChild`.
+typedef AnimatedSwitcherLayoutBuilder = Widget Function(Widget currentChild, List<Widget> previousChildren);
+
+/// A widget that by default does a [FadeTransition] between a new widget and
+/// the widget previously set on the [AnimatedSwitcher] as a child.
+///
+/// If they are swapped fast enough (i.e. before [duration] elapses), more than
+/// one previous child can exist and be transitioning out while the newest one
+/// is transitioning in.
+///
+/// If the "new" child is the same widget type and key as the "old" child, but
+/// with different parameters, then [AnimatedSwitcher] will *not* do a
+/// transition between them, since as far as the framework is concerned, they
+/// are the same widget and the existing widget can be updated with the new
+/// parameters. To force the transition to occur, set a [Key] on each child
+/// widget that you wish to be considered unique (typically a [ValueKey] on the
+/// widget data that distinguishes this child from the others).
+///
+/// The same key can be used for a new child as was used for an already-outgoing
+/// child; the two will not be considered related. (For example, if a progress
+/// indicator with key A is first shown, then an image with key B, then another
+/// progress indicator with key A again, all in rapid succession, then the old
+/// progress indicator and the image will be fading out while a new progress
+/// indicator is fading in.)
+///
+/// {@tool sample}
+///
+/// ```dart
+/// class ClickCounter extends StatefulWidget {
+///   const ClickCounter({Key key}) : super(key: key);
+///
+///   @override
+///   _ClickCounterState createState() => _ClickCounterState();
+/// }
+///
+/// class _ClickCounterState extends State<ClickCounter> {
+///   int _count = 0;
+///
+///   @override
+///   Widget build(BuildContext context) {
+///     return MaterialApp(
+///       home: Material(
+///         child: Column(
+///           mainAxisAlignment: MainAxisAlignment.center,
+///           children: <Widget>[
+///             AnimatedSwitcher(
+///               duration: const Duration(milliseconds: 500),
+///               transitionBuilder: (Widget child, Animation<double> animation) {
+///                 return ScaleTransition(child: child, scale: animation);
+///               },
+///               child: Text(
+///                 '$_count',
+///                 // This key causes the AnimatedSwitcher to interpret this as a "new"
+///                 // child each time the count c

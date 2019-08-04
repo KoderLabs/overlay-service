@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraints_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/custom_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/touch_view" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/touch_view"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/touch_bar_height"
+        android:background="@color/touch_bar_color"
+        android:elevation="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/image_close"
+            android:layout_width="@dimen/close_btn_size"
+            android:layout_height="@dimen/close_btn_size"
+            android:background="@color/close_btn_bg_color"
+            android:padding="@dimen/close_btn_padding"
+            android:src="@drawable/ic_close"
+            android:tint="@color/close_btn_tint_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/image_small_screen"
+            android:layout_width="@dimen/smallscreen_btn_size"
+            android:layout_height="@dimen/smallscreen_btn_size"
+            android:background="@color/smallscreen_btn_bg_color"
+            android:padding="@dimen/smallscreen_btn_padding"
+            android:src="@drawable/ic_fullscreen_exit"
+            android:tint="@color/smallscreen_btn_tint_color"
+            app:layout_constraintEnd_toStartOf="@id/image_full_screen"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/image_full_screen"
+            android:layout_width="@dimen/fullscreen_btn_size"
+            android:layout_height="@dimen/fullscreen_btn_size"
+            android:background="@color/fullscreen_btn_bg_color"
+            android:padding="@dimen/fullscreen_btn_padding"
+            android:src="@drawable/ic_fullscreen"
+            android:tint="@color/fullscreen_btn_tint_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/image_resize"
+        android:layout_width="@dimen/resize_btn_size"
+        android:layout_height="@dimen/resize_btn_size"
+        android:background="@color/resize_btn_bg_color"
+        android:elevation="2dp"
+        android:padding="@dimen/resize_btn_padding"
+        android:src="@drawable/ic_resize_icon"
+        android:tint="@color/resize_btn_tint_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
