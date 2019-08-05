@@ -1,81 +1,84 @@
-// Copyright (c) 2014, the Dart project authors.  Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
+@if "%DEBUG%" == "" @echo off
+@rem ##########################################################################
+@rem
+@rem  Gradle startup script for Windows
+@rem
+@rem ##########################################################################
 
-part of dart.developer;
+@rem Set local scope for the variables with windows NT shell
+if "%OS%"=="Windows_NT" setlocal
 
-/// A UserTag can be used to group samples in the Observatory profiler.
-abstract class UserTag {
-  /// The maximum number of UserTag instances that can be created by a program.
-  static const MAX_USER_TAGS = 64;
+set DIRNAME=%~dp0
+if "%DIRNAME%" == "" set DIRNAME=.
+set APP_BASE_NAME=%~n0
+set APP_HOME=%DIRNAME%
 
-  external factory UserTag(String label);
+@rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
+set DEFAULT_JVM_OPTS=
 
-  /// Label of [this].
-  String get label;
+@rem Find java.exe
+if defined JAVA_HOME goto findJavaFromJavaHome
 
-  /// Make [this] the current tag for the isolate. Returns the current tag
-  /// before setting.
-  UserTag makeCurrent();
+set JAVA_EXE=java.exe
+%JAVA_EXE% -version >NUL 2>&1
+if "%ERRORLEVEL%" == "0" goto init
 
-  /// The default [UserTag] with label 'Default'.
-  external static UserTag get defaultTag;
-}
+echo.
+echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
+echo.
+echo Please set the JAVA_HOME variable in your environment to match the
+echo location of your Java installation.
 
-/// Returns the current [UserTag] for the isolate.
-external UserTag getCurrentTag();
+goto fail
 
-/// Abstract [Metric] class. Metric names must be unique, are hierarchical,
-/// and use periods as separators. For example, 'a.b.c'. Uniqueness is only
-/// enforced when a Metric is registered. The name of a metric cannot contain
-/// the slash ('/') character.
-abstract class Metric {
-  /// [name] of this metric.
-  final String name;
+:findJavaFromJavaHome
+set JAVA_HOME=%JAVA_HOME:"=%
+set JAVA_EXE=%JAVA_HOME%/bin/java.exe
 
-  /// [description] of this metric.
-  final String description;
+if exist "%JAVA_EXE%" goto init
 
-  Metric(this.name, this.description) {
-    if ((name == 'vm') || name.contains('/')) {
-      throw new ArgumentError('Invalid Metric name.');
-    }
-  }
+echo.
+echo ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME%
+echo.
+echo Please set the JAVA_HOME variable in your environment to match the
+echo location of your Java installation.
 
-  Map _toJSON();
-}
+goto fail
 
-/// A measured value with a min and max. Initial value is min. Value will
-/// be clamped to the interval [min, max].
-class Gauge extends Metric {
-  final double min;
-  final double max;
+:init
+@rem Get command-line arguments, handling Windows variants
 
-  double _value;
-  double get value => _value;
-  set value(double v) {
-    if (v < min) {
-      v = min;
-    } else if (v > max) {
-      v = max;
-    }
-    _value = v;
-  }
+if not "%OS%" == "Windows_NT" goto win9xME_args
 
-  Gauge(String name, String description, this.min, this.max)
-      : super(name, description) {
-    ArgumentError.checkNotNull(min, 'min');
-    ArgumentError.checkNotNull(max, 'max');
-    if (!(min < max)) throw new ArgumentError('min must be less than max');
-    _value = min;
-  }
+:win9xME_args
+@rem Slurp the command line arguments.
+set CMD_LINE_ARGS=
+set _SKIP=2
 
-  Map _toJSON() {
-    var map = {
-      'type': 'Gauge',
-      'id': 'metrics/$name',
-      'name': name,
-      'description': description,
-      'value': value,
-      'min': min,
-      'max': max
+:win9xME_args_slurp
+if "x%~1" == "x" goto execute
+
+set CMD_LINE_ARGS=%*
+
+:execute
+@rem Setup the command line
+
+set CLASSPATH=%APP_HOME%\gradle\wrapper\gradle-wrapper.jar
+
+@rem Execute Gradle
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% "-Dorg.gradle.appname=%APP_BASE_NAME%" -classpath "%CLASSPATH%" org.gradle.wrapper.GradleWrapperMain %CMD_LINE_ARGS%
+
+:end
+@rem End local scope for the variables with windows NT shell
+if "%ERRORLEVEL%"=="0" goto mainEnd
+
+:fail
+rem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return code instead of
+rem the _cmd.exe /c_ return code!
+if  not "" == "%GRADLE_EXIT_CONSOLE%" exit 1
+exit /b 1
+
+:mainEnd
+if "%OS%"=="Windows_NT" endlocal
+
+:omega
