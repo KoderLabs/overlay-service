@@ -33,8 +33,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation project(path: ':helper')
-    implementation project(path: ':overlayservice')
+
+    implementation 'com.github.saeed-younus.overlay-service:overlayservice:1.13'
+    implementation 'com.github.saeed-younus.overlay-service:helper:1.13'
 
     // Exoplayer
     implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
