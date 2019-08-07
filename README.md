@@ -1,7 +1,9 @@
 # Window Overlay Service
-An easy way to create PIP(Picture in picture) and resizeable overlay window Android.
+An easy way to create PIP(Picture in picture) and resizeable overlay window in android.
 
-<!-- <img src="https://raw.githubusercontent.com/afollestad/material-camera/master/art/showcase1.png" width="800px" /> -->
+<img src="https://i.imgur.com/RXWT6ZX.gif" data-canonical-src="https://i.imgur.com/RXWT6ZX.gif" width="200" height="400" />&nbsp;&nbsp;
+<img src="https://i.imgur.com/MsPmifA.gif" data-canonical-src="https://i.imgur.com/MsPmifA.gif" width="200" height="400" />&nbsp;&nbsp;
+<img src="https://i.imgur.com/MBWG3az.gif" data-canonical-src="https://i.imgur.com/MBWG3az.gif" width="200" height="400" />
 
 ---
 
