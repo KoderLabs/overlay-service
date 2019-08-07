@@ -675,4 +675,37 @@ class MainActivity : AppCompatActivity() {
     }
 }  
 ```
+---
 
+## Attributes
+
+You can over write dimen and colors of icons.
+
+**For `dimen.xml`**
+
+| Attribute name | Description |
+| :--: | :-- |
+| touch_bar_height | Touch bar size for resizeable overlay only. |
+| close_btn_size | close button icon size for all overlay |
+| close_btn_padding | close button padding for all overlay |
+| fullscreen_btn_size | fullscreen button icon size for custom pip overlay and resizeable overlay |
+| fullscreen_btn_padding | fullscreen button padding for custom pip overlay and resizeable overlay |
+| smallscreen_btn_size | small screen / fulscreen exit button icon size for custom pip overlay and resizeable overlay  |
+| smallscreen_btn_padding | small screen / fulscreen exit button padding for custom pip overlay and resizeable overlay |
+| resize_btn_size | Resize button size for resizeable overlay only. |
+| resize_btn_padding | Resize button padding for resizeable overlay only. |
+
+
+**For `colors.xml`**
+
+| Attribute name | Description |
+| :--: | :-- |
+| touch_bar_color | Touch bar color |
+| close_btn_bg_color | close button icon background color |
+| close_btn_tint_color | close button icon color |
+| fullscreen_btn_bg_color | fullscreen button icon background color |
+| fullscreen_btn_tint_color | fullscreen button icon color |
+| smallscreen_btn_bg_color | small screen / fulscreen exit button icon background color |
+| smallscreen_btn_tint_color | small screen / fulscreen exit button icon color |
+| resize_btn_bg_color | Resize button icon background color |
+| resize_btn_tint_color | Resize button icon color |
